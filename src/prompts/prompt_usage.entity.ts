@@ -1,0 +1,21 @@
+
+import { User } from 'src/users/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+
+@Entity()
+export class Prompt_Usage {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+   @ManyToOne(() => User, (user) => user.prompt_Usage)
+   user: User;
+
+  @Column({type: 'datetime',default: () => 'CURRENT_TIMESTAMP'})
+  creation_date: string;
+
+
+  @Column({default: 0})
+  comptage_prompt: number;
+
+
+}
