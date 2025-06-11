@@ -105,6 +105,27 @@ export class UsersService {
       
    }
 
+   async UserInfo(userId: string , res: Response){
+      const dataUsers = await this.userRepository.findOne({
+         where:{id: userId}});
+
+         console.log(dataUsers);
+
+         if(!dataUsers){
+            return res.status(HttpStatus.BAD_REQUEST).json({
+               error: true,
+               message:"Informations non trouvée"
+            })
+         }
+
+            return res.status(HttpStatus.OK).json({
+               error: false,
+               message: "Données trouvées avec succès",
+               data: dataUsers
+
+      })
+   }
+
    async updateProfile(userData: updateUserDto, res: Response){
       
       // rechercher l'utilisateur à mettre à jour

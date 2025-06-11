@@ -1,7 +1,8 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { OpenaiService } from './openai.service';
 import { DataPromptDto } from './dto/data-prompt.dto';
 import{ Response } from  'express'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 enum Option  {
         Scan = "Scan",
@@ -22,6 +23,8 @@ export class OpenaiController {
       
 
 
+
+    @UseGuards(JwtAuthGuard)
     @Post('/chat')
     async sendPrompt(@Body() dataprompt: DataPromptDto, @Res() res:Response){
          
