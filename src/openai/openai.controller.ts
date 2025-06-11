@@ -3,21 +3,62 @@ import { OpenaiService } from './openai.service';
 import { DataPromptDto } from './dto/data-prompt.dto';
 import{ Response } from  'express'
 
+enum Option  {
+        Scan = "Scan",
+        Footprint = "Footprint",
+        Enum = "Enum"
+}
+
+type Options = "Scan" | "Footprint" | "Enum";
+
+
+
+
 @Controller('openai')
 export class OpenaiController {
 
     constructor(private readonly openaiService: OpenaiService){}
 
+      
+
+
     @Post('/chat')
     async sendPrompt(@Body() dataprompt: DataPromptDto, @Res() res:Response){
          
       try {
+          
+        console.log(dataprompt)
+        console.log(Option.Scan.toString())
 
-            const fullPrompt = `Option sélectionnée : ${dataprompt.option}. Action : ${dataprompt.prompt}.\nRetourne uniquement la commande à exécuter sans aucun commentaire ni explication.`;
+        
+        if(dataprompt.option != Option.Scan.toString() && dataprompt.option != Option.Footprint.toString()
+            && dataprompt.option != Option.Enum.toString()){
+                console.log('ereur de saisir')
+                return res.status(HttpStatus.BAD_REQUEST).json({
+                    error: true,
+                    message: "errur de saisie, veuillez entrer l'un de ses mots: scan, footprint ou enum"
+                })
+             }
+
+             let DataPromptOption;
+        if(dataprompt.option == "Scan"){
+            DataPromptOption = "faire un scanning "
+        }
+
+        else if(dataprompt.option == "Footprint"){
+             DataPromptOption = "faire un footprinting"
+        }
+
+        else if(dataprompt.option == "Enum"){
+            DataPromptOption = "faire une Enumeration"
+        }
+        
+
+            const fullPrompt = `Option sélectionnée : ${DataPromptOption}. Action : ${dataprompt.prompt}.\nRetourne uniquement la commande à exécuter sans aucun commentaire ni explication.`;
             const response = await this.openaiService.sendPrompt(fullPrompt);
             return res.status(HttpStatus.OK).json({
                 error: false,
-                message: "requete excutée avec succès",
+                message: "réquête exécutée avec succès",
                 data:response,
             });
         } catch (error) {
