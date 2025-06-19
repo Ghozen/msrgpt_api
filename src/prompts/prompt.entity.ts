@@ -12,14 +12,11 @@ export class Prompt {
   message: string;
 
   @Column({nullable: true})
-  repoonse: string;
+  reponse: string;
 
   @Column({type: 'datetime',default: () => 'CURRENT_TIMESTAMP'})
   creation_date: string;
-
-  @Column({default: 0})
-  comptage_prompt: number;
-
+  
   @ManyToOne(() => User, (user) => user.prompt)
   user: User;
 

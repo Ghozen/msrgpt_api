@@ -27,7 +27,7 @@ import { OpenaiModule } from './openai/openai.module';
     
     UsersModule,
     AuthModule,
-    MailerModule.forRoot({      transport: {
+    MailerModule.forRoot({ transport: {
         host: process.env.EMAIL_HOST,
         port: process.env.EMAIL_PORT,
         secure: true,
@@ -38,6 +38,7 @@ import { OpenaiModule } from './openai/openai.module';
       },
     }),
     OpenaiModule,
+  
   ],
   controllers: [AppController],
   providers: [AppService],

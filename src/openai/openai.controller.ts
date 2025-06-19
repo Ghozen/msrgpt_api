@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { OpenaiService } from './openai.service';
 import { DataPromptDto } from './dto/data-prompt.dto';
 import{ Response } from  'express'
@@ -26,7 +26,7 @@ export class OpenaiController {
 
     @UseGuards(JwtAuthGuard)
     @Post('/chat')
-    async sendPrompt(@Body() dataprompt: DataPromptDto, @Res() res:Response){
+    async sendPrompt(@Body() dataprompt: DataPromptDto, @Res() res:Response, @Request() req){
          
       try {
           
@@ -39,7 +39,7 @@ export class OpenaiController {
                 console.log('ereur de saisir')
                 return res.status(HttpStatus.BAD_REQUEST).json({
                     error: true,
-                    message: "errur de saisie, veuillez entrer l'un de ses mots: scan, footprint ou enum"
+                    message: "erreur de saisie, veuillez entrer l'un de ses mots: Scan, Footprint ou Enum"
                 })
              }
 
@@ -58,7 +58,7 @@ export class OpenaiController {
         
 
             const fullPrompt = `Option sélectionnée : ${DataPromptOption}. Action : ${dataprompt.prompt}.\nRetourne uniquement la commande à exécuter sans aucun commentaire ni explication.`;
-            const response = await this.openaiService.sendPrompt(fullPrompt);
+            const response = await this.openaiService.sendPrompt(fullPrompt,req.user.userId, res);
             return res.status(HttpStatus.OK).json({
                 error: false,
                 message: "réquête exécutée avec succès",
