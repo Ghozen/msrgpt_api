@@ -21,6 +21,7 @@ export class AuthController {
     return this.authService.connexion(userData.email, userData.password, res);
 
   }
+  
 @Post('verification/otp')
  otpverify(@Body()  dataUser:string, @Res() res: Response){
        console.log("email:",dataUser["email"]);

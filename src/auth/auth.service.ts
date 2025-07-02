@@ -91,7 +91,7 @@ export class AuthService {
       async  createUser(fullName: string, pseudo: string, 
         password: string, email: string, res:Response ){
 
-            if(!email.endsWith('@gmail.com')){
+            if(!email.endsWith('@gmail.com')){  
             
                 return res.status(HttpStatus.BAD_REQUEST).json({
                     error: false,
