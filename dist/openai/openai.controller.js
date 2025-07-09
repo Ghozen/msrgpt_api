@@ -17,6 +17,9 @@ const common_1 = require("@nestjs/common");
 const openai_service_1 = require("./openai.service");
 const data_prompt_dto_1 = require("./dto/data-prompt.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const user_entity_1 = require("../users/user.entity");
 var Option;
 (function (Option) {
     Option["Scan"] = "Scan";
@@ -25,11 +28,14 @@ var Option;
 })(Option || (Option = {}));
 let OpenaiController = class OpenaiController {
     openaiService;
-    constructor(openaiService) {
+    userRepository;
+    constructor(openaiService, userRepository) {
         this.openaiService = openaiService;
+        this.userRepository = userRepository;
     }
     async sendPrompt(dataprompt, res, req) {
         try {
+            this.openaiService.confirmEmail(req.user.userId, res, req);
             console.log(dataprompt);
             console.log(Option.Scan.toString());
             if (dataprompt.option != Option.Scan.toString() && dataprompt.option != Option.Footprint.toString()
@@ -79,6 +85,8 @@ __decorate([
 ], OpenaiController.prototype, "sendPrompt", null);
 exports.OpenaiController = OpenaiController = __decorate([
     (0, common_1.Controller)('openai'),
-    __metadata("design:paramtypes", [openai_service_1.OpenaiService])
+    __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __metadata("design:paramtypes", [openai_service_1.OpenaiService,
+        typeorm_2.Repository])
 ], OpenaiController);
 //# sourceMappingURL=openai.controller.js.map

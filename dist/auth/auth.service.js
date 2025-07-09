@@ -116,6 +116,8 @@ let AuthService = class AuthService {
                 });
             }
             await this.appService.sendMail(email, codeOtp);
+            delete dataSave.password;
+            delete dataSave.codeOtp;
             return res.status(common_1.HttpStatus.CREATED).json({
                 error: false,
                 message: 'Compte crée avec succès',

@@ -15,7 +15,7 @@ export class AppService {
   async sendMail(to: string, codeOtp: string, ): Promise<void>{
      
       await this.mailerService.sendMail({
-      from:  'noreply@sgppconseils.com', 
+      from:  process.env.EMAIL_FROM, 
        to,
       subject: `Confimation code otp`,
       text: `Votre code OTP est: ${codeOtp}`,

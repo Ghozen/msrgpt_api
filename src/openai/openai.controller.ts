@@ -3,6 +3,10 @@ import { OpenaiService } from './openai.service';
 import { DataPromptDto } from './dto/data-prompt.dto';
 import{ Response } from  'express'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import { use } from 'passport';
 
 enum Option  {
         Scan = "Scan",
@@ -18,11 +22,8 @@ type Options = "Scan" | "Footprint" | "Enum";
 @Controller('openai')
 export class OpenaiController {
 
-    constructor(private readonly openaiService: OpenaiService){}
-
-      
-
-
+    constructor(private readonly openaiService: OpenaiService, 
+       @InjectRepository(User) private readonly userRepository: Repository<User>){}
 
     @UseGuards(JwtAuthGuard)
     @Post('/chat')
@@ -30,9 +31,11 @@ export class OpenaiController {
          
       try {
           
+         this.openaiService.confirmEmail(req.user.userId, res, req); 
+
         console.log(dataprompt)
         console.log(Option.Scan.toString())
-
+         
         
         if(dataprompt.option != Option.Scan.toString() && dataprompt.option != Option.Footprint.toString()
             && dataprompt.option != Option.Enum.toString()){

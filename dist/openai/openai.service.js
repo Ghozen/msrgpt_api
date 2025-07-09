@@ -38,6 +38,32 @@ let OpenaiService = class OpenaiService {
     promptCount() {
         return this.promptNumber + 1;
     }
+    async confirmEmail(userId, res, req) {
+        try {
+            const userVerify = await this.userRespository.findOne({
+                where: { id: req.user.userId },
+            });
+            if (!userVerify) {
+                return res.status(common_1.HttpStatus.FORBIDDEN).json({
+                    error: true,
+                    message: "Utilisateur non trouvé"
+                });
+            }
+            if (userVerify.emailverify !== true) {
+                return res.status(common_1.HttpStatus.FORBIDDEN).json({
+                    error: true,
+                    message: "Veuillez confirmer votre email avant de continuer"
+                });
+            }
+        }
+        catch (error) {
+            console.log("Error:", error);
+            return res.status(common_1.HttpStatus.INTERNAL_SERVER_ERROR).json({
+                error: true,
+                message: `Erreur survenu: ${error.message}`
+            });
+        }
+    }
     async sendPrompt(prompt, userId, res) {
         try {
             const verifyUser = await this.userRespository.findOne({

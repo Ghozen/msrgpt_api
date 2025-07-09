@@ -35,7 +35,39 @@ export class OpenaiService {
             return this.promptNumber + 1;
     }
 
+     async confirmEmail(userId: string, res: Response, req: any) {
+        
+        try {
+            
+              const userVerify = await this.userRespository.findOne({
+            where: {id: req.user.userId},
+        });
+        // Vérification de l'existence de l'utilisateur
+        
 
+        if(!userVerify){
+            return res.status(HttpStatus.FORBIDDEN).json({
+                error: true,
+                message: "Utilisateur non trouvé"
+            });
+        }
+        // verification que le champs emailVerify est à true
+        if(userVerify.emailverify !== true){
+            return res.status(HttpStatus.FORBIDDEN).json({
+                error: true,
+                message: "Veuillez confirmer votre email avant de continuer"
+            });
+        }
+
+        } catch (error) {
+            console.log("Error:", error)
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+                error: true,
+                message: `Erreur survenu: ${error.message}`
+            })
+            
+        }
+     }
 
     async sendPrompt(prompt: string, userId: string, res: Response) {
 

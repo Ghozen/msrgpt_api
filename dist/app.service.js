@@ -22,7 +22,7 @@ let AppService = class AppService {
     }
     async sendMail(to, codeOtp) {
         await this.mailerService.sendMail({
-            from: 'noreply@sgppconseils.com',
+            from: process.env.EMAIL_FROM,
             to,
             subject: `Confimation code otp`,
             text: `Votre code OTP est: ${codeOtp}`,

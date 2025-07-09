@@ -11,5 +11,6 @@ export declare class OpenaiService {
     private promptNumber;
     constructor(promptRespository: Repository<Prompt>, userRespository: Repository<User>, usageRespository: Repository<Prompt_Usage>);
     promptCount(): number;
+    confirmEmail(userId: string, res: Response, req: any): Promise<Response<any, Record<string, any>> | undefined>;
     sendPrompt(prompt: string, userId: string, res: Response): Promise<Response<any, Record<string, any>>>;
 }

@@ -55,7 +55,7 @@ export class AuthService {
                         message: "le code otp est invalide"
                     })
                 }
-
+            
 
                 const updateData = this.userRepository.update(userVerify.id,{
                     emailverify: true,
@@ -140,7 +140,9 @@ export class AuthService {
                 }
                   
                  await this.appService.sendMail(email, codeOtp);
-
+                 
+                 delete (dataSave as {password?:string}).password; // Supprimer le mot de passe du résultat
+                 delete (dataSave as {codeOtp?:string}).codeOtp; // Supprimer le code OTP du résultat
 
                 return res.status(HttpStatus.CREATED).json({
                     error:false,
